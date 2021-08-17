@@ -48,9 +48,14 @@ atiendenAlMismoTiempo(Persona,OtraPersona,Dia,Hora):-
 % posibilidadDeAtencion/2(ListaPersona/s,Dia). -> Recursividad?
 
 posibilidadDeAtencion(Personas,Dia):-
-    atiende(Persona,Dia,_),
-    findall(OtraPersona,atiendenAlMismoTiempo(OtraPersona,Persona,Dia,_),ListaDuplas),
-    list_to_set(ListaDuplas, Personas).
+    atiende(_,Dia,_),
+    findall(Personas,quienesAtiendenPorHorario(Dia,_,Personas),ListaParejas),
+    list_to_set(ListaParejas, Personas).
+
+quienesAtiendenPorHorario(Dia,Horario,Personas):-
+    between(0,24,Horario),
+    findall(Persona,atiende(Persona,Dia,Horario),Horarios),
+    list_to_set(Horarios,Personas).
 
 % 5) --------------------------------------------------------------
 % vendio/3(Persona,Fecha,Productos).
